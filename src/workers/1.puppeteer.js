@@ -32,8 +32,10 @@ async function scrapeVideos({
 
   await page.bringToFront();
 
-  SHOW_PROGRESS && console.log(`[ ]      Clicking ${CSS_SELECTOR_SHOW_ALL}`);
-  await page.click(CSS_SELECTOR_SHOW_ALL);
+  // CLICK EXAMPLE
+
+  // SHOW_PROGRESS && console.log(`[ ]      Clicking ${CSS_SELECTOR_SHOW_ALL}`);
+  // await page.click(CSS_SELECTOR_SHOW_ALL);
 
   // SCREENSHOT EXAMPLE
 
@@ -45,9 +47,10 @@ async function scrapeVideos({
   //   SHOW_PROGRESS && console.log(`[ ]      Saved to ${SCREENSHOT_FULLPATH}`);
   // }
 
-  const videos = await page.$$(CSS_SELECTOR_VIDEO_WRAPPER);
-  SHOW_PROGRESS &&
-    process.stdout.write(`[ ]      Scraping ${CSS_SELECTOR_VIDEO_WRAPPER} `);
+  // SCRAPE EXAMPLE
+  // const videos = await page.$$(CSS_SELECTOR_VIDEO_WRAPPER);
+  // SHOW_PROGRESS &&
+  //   process.stdout.write(`[ ]      Scraping ${CSS_SELECTOR_VIDEO_WRAPPER} `);
   // const shows = await Promise.all(
   //   videos.map(async video => {
   //     SHOW_PROGRESS && process.stdout.write(".");
@@ -62,12 +65,12 @@ async function scrapeVideos({
   //     return [tileText, infoText];
   //   })
   // );
-  SHOW_PROGRESS && process.stdout.write("\n");
+  // SHOW_PROGRESS && process.stdout.write("\n");
 
   SHOW_PROGRESS && console.log("[ ]      Closing Browser");
   await browser.close();
 
-  return shows;
+  // return shows;
 }
 
 module.exports = scrapeVideos;

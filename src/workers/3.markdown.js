@@ -36,7 +36,8 @@ const createMarkdown = (
     }
   }
 ) => {
-  SHOW_PROGRESS && console.log(`[ ] Markdown`);
+  SHOW_PROGRESS && console.log(`[ ] Markdown TBD`);
+
   const tables = [];
 
   // Generate table data

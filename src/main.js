@@ -1,7 +1,7 @@
-const puppeteer = require("./puppeteer");
-const parser = require("./parser");
-const markdown = require("./markdown");
-const output = require("./output");
+const puppeteer = require("./workers/1.puppeteer");
+const parser = require("./workers/2.parser");
+const markdown = require("./workers/3.markdown");
+const output = require("./workers/4.output");
 
 async function main(options) {
   // SHOW_PROGRESS && //

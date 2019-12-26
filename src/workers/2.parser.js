@@ -4,8 +4,10 @@ const parseVideoInformation = (
   { SHOW_PROGRESS, parser: { VERBOSE_PARSING } }
 ) => {
   SHOW_PROGRESS && process.stdout.write("\n");
+  SHOW_PROGRESS && console.log(`[ ] Markdown TBD`);
+
   // Parse Data
-  return data;
+  return;
 };
 
 module.exports = parseVideoInformation;

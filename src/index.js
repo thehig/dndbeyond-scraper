@@ -1,4 +1,4 @@
 const main = require("./main");
-const options = require("./options");
+const options = require("./development");
 
 main(options);
