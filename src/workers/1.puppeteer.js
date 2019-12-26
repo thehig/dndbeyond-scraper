@@ -11,8 +11,8 @@ async function main(options) {
       CHROME_ENABLE_DEVTOOLS,
       CHROME_ENABLE_HEADLESS,
       WEB_URL,
-      // CSS_SELECTORS,
 
+      CSS_SELECTOR_CAMPAIGN_LIST,
       TAKE_SCREENSHOT,
       AUTHENTICATE,
       AUTHENTICATE_TIMEOUT
@@ -51,11 +51,15 @@ async function main(options) {
   const captchaRestart = await captcha({ browser, page }, options);
   if (captchaRestart) return "RESTART";
 
+  await page.waitForSelector(CSS_SELECTOR_CAMPAIGN_LIST);
+
   SHOW_PROGRESS && console.log(`[ ]      Page Ready`);
 
   if (TAKE_SCREENSHOT) {
-    SHOW_PROGRESS && console.log(`[ ]      Screenshotting`);
-    await page.screenshot({ path: SCREENSHOT_FULLPATH, fullPage: true });
+    SHOW_PROGRESS &&
+      console.log(`[ ]      Screenshotting ${CSS_SELECTOR_CAMPAIGN_LIST}`);
+    const campaignList = await page.$(CSS_SELECTOR_CAMPAIGN_LIST);
+    await campaignList.screenshot({ path: SCREENSHOT_FULLPATH });
     SHOW_PROGRESS && console.log(`[ ]      Saved to ${SCREENSHOT_FULLPATH}`);
   }
 

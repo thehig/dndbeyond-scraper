@@ -13,7 +13,7 @@ const options = {
   puppeteer: {
     TAKE_SCREENSHOT: false,
 
-    WEB_URL: "https://www.dndbeyond.com/",
+    WEB_URL: "https://www.dndbeyond.com/my-campaigns",
     CHROME_EXECUTABLE_PATH: "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe", // prettier-ignore
     CHROME_DATA_DIR: path.resolve(__dirname, "../chromedata"),
 
@@ -21,10 +21,10 @@ const options = {
     CHROME_ENABLE_HEADLESS: true,
 
     AUTHENTICATE: false,
-    AUTHENTICATE_TIMEOUT: 10 * 60 * 1000
+    AUTHENTICATE_TIMEOUT: 10 * 60 * 1000, // ms
 
     // CSS Selectors
-    // eg: CSS_SELECTOR_VIDEO_GRID: ".videos-grid-container",
+    CSS_SELECTOR_CAMPAIGN_LIST: ".RPGCampaign-listing"
   },
   parser: {
     VERBOSE_PARSING: false
