@@ -10,14 +10,15 @@ async function main(options) {
   const scraped = await puppeteer(options);
   if (scraped === "RESTART") {
     console.log("[ ] Please try again");
+    // TODO: Automate the restart but override the AUTHENTICATE to prevent infinite loop
     return;
   }
-  if (!options.SHOW_PROGRESS) process.stdout.write(".");
-  const parsed = parser(scraped, options);
-  if (!options.SHOW_PROGRESS) process.stdout.write(".");
-  const markeddown = markdown(parsed, options);
-  if (!options.SHOW_PROGRESS) process.stdout.write(".\n");
-  output(markeddown, options);
+  // if (!options.SHOW_PROGRESS) process.stdout.write(".");
+  // const parsed = parser(scraped, options);
+  // if (!options.SHOW_PROGRESS) process.stdout.write(".");
+  // const markeddown = markdown(parsed, options);
+  // if (!options.SHOW_PROGRESS) process.stdout.write(".\n");
+  // output(markeddown, options);
   console.log("[ ] Complete");
 }
 
