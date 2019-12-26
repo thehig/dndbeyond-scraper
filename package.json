@@ -2,9 +2,12 @@
   "name": "dndbeyond-scraper",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "bin/dndbeyond-scraper.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/index.js"
+  },
+  "bin": {
+    "dndbeyond-scraper": "./bin/dndbeyond-scraper.js"
   },
   "repository": {
     "type": "git",
@@ -17,6 +20,7 @@
   },
   "homepage": "https://github.com/thehig/dndbeyond-scraper#readme",
   "dependencies": {
+    "prettier": "^1.19.1",
     "puppeteer": "^2.0.0",
     "yargs": "^15.0.2"
   }
