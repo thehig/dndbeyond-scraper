@@ -6,6 +6,8 @@ async function scrapeVideos({
   puppeteer: {
     CHROME_EXECUTABLE_PATH,
     CHROME_DATA_DIR,
+    CHROME_ENABLE_DEVTOOLS,
+    CHROME_ENABLE_HEADLESS,
     WEB_URL,
     // CSS_SELECTORS,
 
@@ -16,8 +18,8 @@ async function scrapeVideos({
   SHOW_PROGRESS && console.log(`[ ] Puppeteer`);
   SHOW_PROGRESS && console.log(`[ ]      Opening Browser`);
   const browser = await puppeteer.launch({
-    devtools: true,
-    headless: true,
+    devtools: CHROME_ENABLE_DEVTOOLS,
+    headless: CHROME_ENABLE_HEADLESS,
     executablePath: CHROME_EXECUTABLE_PATH,
     userDataDir: CHROME_DATA_DIR
   });

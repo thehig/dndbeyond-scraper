@@ -15,7 +15,10 @@ const options = {
 
     WEB_URL: "https://followshows.com/",
     CHROME_EXECUTABLE_PATH: "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe", // prettier-ignore
-    CHROME_DATA_DIR: path.resolve(__dirname, "../chromedata")
+    CHROME_DATA_DIR: path.resolve(__dirname, "../chromedata"),
+
+    CHROME_ENABLE_DEVTOOLS: false,
+    CHROME_ENABLE_HEADLESS: true
 
     // CSS Selectors
     // eg: CSS_SELECTOR_VIDEO_GRID: ".videos-grid-container",

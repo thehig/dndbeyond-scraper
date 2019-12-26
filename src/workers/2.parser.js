@@ -4,7 +4,7 @@ const parseVideoInformation = (
   { SHOW_PROGRESS, parser: { VERBOSE_PARSING } }
 ) => {
   SHOW_PROGRESS && process.stdout.write("\n");
-  SHOW_PROGRESS && console.log(`[ ] Markdown TBD`);
+  SHOW_PROGRESS && console.log(`[ ] Parser TBD`);
 
   // Parse Data
   return;
