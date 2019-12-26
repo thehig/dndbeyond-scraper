@@ -8,6 +8,10 @@ async function main(options) {
   process.stdout.write("[ ] Running ");
   process.stdout.write(options.SHOW_PROGRESS ? "\n" : "."); // If we're showing progress, put in a newline so we don't fuck all the printing up
   const scraped = await puppeteer(options);
+  if (scraped === "RESTART") {
+    console.log("[ ] Please try again");
+    return;
+  }
   if (!options.SHOW_PROGRESS) process.stdout.write(".");
   const parsed = parser(scraped, options);
   if (!options.SHOW_PROGRESS) process.stdout.write(".");

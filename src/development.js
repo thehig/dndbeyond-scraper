@@ -6,7 +6,8 @@ const mergedArgs = {
     ...defaults.puppeteer,
     CHROME_ENABLE_DEVTOOLS: true,
     CHROME_ENABLE_HEADLESS: false,
-    TAKE_SCREENSHOT: true
+    TAKE_SCREENSHOT: true,
+    AUTHENTICATE: true
   },
   parser: {
     ...defaults.parser,

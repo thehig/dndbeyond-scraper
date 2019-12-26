@@ -21,6 +21,7 @@
   "homepage": "https://github.com/thehig/dndbeyond-scraper#readme",
   "dependencies": {
     "prettier": "^1.19.1",
+    "promise-any": "^0.2.0",
     "puppeteer": "^2.0.0",
     "yargs": "^15.0.2"
   }

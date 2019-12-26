@@ -1,20 +1,26 @@
 const puppeteer = require("puppeteer");
+const promiseAny = require("promise-any"); // TODO: Remove once Promise.any is a thing
+const captcha = require("./captcha");
 
 // Open the browser, scrape the raw data into a JSON object
-async function scrapeVideos({
-  SHOW_PROGRESS,
-  puppeteer: {
-    CHROME_EXECUTABLE_PATH,
-    CHROME_DATA_DIR,
-    CHROME_ENABLE_DEVTOOLS,
-    CHROME_ENABLE_HEADLESS,
-    WEB_URL,
-    // CSS_SELECTORS,
+async function scrapeVideos(options) {
+  const {
+    SHOW_PROGRESS,
+    puppeteer: {
+      CHROME_EXECUTABLE_PATH,
+      CHROME_DATA_DIR,
+      CHROME_ENABLE_DEVTOOLS,
+      CHROME_ENABLE_HEADLESS,
+      WEB_URL,
+      // CSS_SELECTORS,
 
-    TAKE_SCREENSHOT
-  },
-  output: { SCREENSHOT_FULLPATH }
-}) {
+      TAKE_SCREENSHOT,
+      AUTHENTICATE,
+      AUTHENTICATE_TIMEOUT
+    },
+    output: { SCREENSHOT_FULLPATH }
+  } = options;
+
   SHOW_PROGRESS && console.log(`[ ] Puppeteer`);
   SHOW_PROGRESS && console.log(`[ ]      Opening Browser`);
   const browser = await puppeteer.launch({
@@ -33,6 +39,28 @@ async function scrapeVideos({
   });
 
   await page.bringToFront();
+
+  const needsRestart = await captcha({ browser, page }, options);
+  if (needsRestart) {
+    return "RESTART"; // This string literal will instruct main.js to bail
+  }
+
+  if (AUTHENTICATE) {
+    // Give the user ~10 mins to Authenticate
+    SHOW_PROGRESS &&
+      console.log(
+        `[ ]      Waiting up to ${AUTHENTICATE_TIMEOUT /
+          1000}seconds for user to authenticate. Kill window with CTRL-C if it doesn't close automatically when you close Chrome`
+      );
+
+    await promiseAny([
+      new Promise(x => page.on("close", x)), // User closed tab, fires close event
+      page.waitFor(AUTHENTICATE_TIMEOUT) // Timeout
+    ]);
+
+    await browser.close();
+    return;
+  }
 
   // CLICK EXAMPLE
 

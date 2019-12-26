@@ -13,12 +13,15 @@ const options = {
   puppeteer: {
     TAKE_SCREENSHOT: false,
 
-    WEB_URL: "https://followshows.com/",
+    WEB_URL: "https://www.dndbeyond.com/",
     CHROME_EXECUTABLE_PATH: "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe", // prettier-ignore
     CHROME_DATA_DIR: path.resolve(__dirname, "../chromedata"),
 
     CHROME_ENABLE_DEVTOOLS: false,
-    CHROME_ENABLE_HEADLESS: true
+    CHROME_ENABLE_HEADLESS: true,
+
+    AUTHENTICATE: false,
+    AUTHENTICATE_TIMEOUT: 10 * 60 * 1000
 
     // CSS Selectors
     // eg: CSS_SELECTOR_VIDEO_GRID: ".videos-grid-container",
