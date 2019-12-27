@@ -13,6 +13,11 @@ async function main(options) {
       WEB_URL,
 
       CSS_SELECTOR_CAMPAIGN_LIST,
+      CSS_SELECTOR_CAMPAIGN_LINK,
+      CSS_SELECTOR_PROFILE_CARD,
+      CSS_SELECTOR_PROFILE_LINK,
+      CSS_SELECTOR_PROFILE_NAME,
+
       TAKE_SCREENSHOT,
       AUTHENTICATE,
       AUTHENTICATE_TIMEOUT
@@ -56,47 +61,49 @@ async function main(options) {
   SHOW_PROGRESS && console.log(`[ ]      Page Ready`);
 
   if (TAKE_SCREENSHOT) {
-    SHOW_PROGRESS &&
-      console.log(`[ ]      Screenshotting ${CSS_SELECTOR_CAMPAIGN_LIST}`);
+    SHOW_PROGRESS && console.log(`[ ]      Screenshotting Campaign List`);
     const campaignList = await page.$(CSS_SELECTOR_CAMPAIGN_LIST);
-    await campaignList.screenshot({ path: SCREENSHOT_FULLPATH });
-    SHOW_PROGRESS && console.log(`[ ]      Saved to ${SCREENSHOT_FULLPATH}`);
+    const filename = SCREENSHOT_FULLPATH();
+    await campaignList.screenshot({ path: filename });
+    SHOW_PROGRESS && console.log(`[ ]      Saved to ${filename}`);
   }
 
-  // CLICK EXAMPLE
+  // Click into campaign
+  SHOW_PROGRESS && console.log(`[ ]      Clicking into Campaign`);
+  await Promise.all([
+    page.waitForNavigation(),
+    page.click(CSS_SELECTOR_CAMPAIGN_LINK)
+  ]);
 
-  // SHOW_PROGRESS && console.log(`[ ]      Clicking ${CSS_SELECTOR_SHOW_ALL}`);
-  // await page.click(CSS_SELECTOR_SHOW_ALL);
+  if (TAKE_SCREENSHOT) {
+    SHOW_PROGRESS && console.log(`[ ]      Screenshotting Campaign Page`);
+    const filename = SCREENSHOT_FULLPATH();
+    await page.screenshot({ path: filename, fullPage: true });
+    SHOW_PROGRESS && console.log(`[ ]      Saved to ${filename}`);
+  }
 
-  // SCREENSHOT EXAMPLE
+  const profileCards = await page.$$(CSS_SELECTOR_PROFILE_CARD);
+  SHOW_PROGRESS &&
+    process.stdout.write(`[ ]      Scraping ${CSS_SELECTOR_PROFILE_CARD} `);
 
-  // if (TAKE_SCREENSHOT) {
-  //   SHOW_PROGRESS &&
-  //     console.log(`[ ]      Screenshotting ${CSS_SELECTOR_VIDEO_GRID}`);
-  //   const videoGrid = await page.$(CSS_SELECTOR_VIDEO_GRID);
-  //   await videoGrid.screenshot({ path: SCREENSHOT_FULLPATH });
-  //   SHOW_PROGRESS && console.log(`[ ]      Saved to ${SCREENSHOT_FULLPATH}`);
-  // }
+  const profiles = await Promise.all(
+    profileCards.map(async profileCard => {
+      SHOW_PROGRESS && process.stdout.write(".");
 
-  // SCRAPE EXAMPLE
-  // const videos = await page.$$(CSS_SELECTOR_VIDEO_WRAPPER);
-  // SHOW_PROGRESS &&
-  //   process.stdout.write(`[ ]      Scraping ${CSS_SELECTOR_VIDEO_WRAPPER} `);
-  // const shows = await Promise.all(
-  //   videos.map(async video => {
-  //     SHOW_PROGRESS && process.stdout.write(".");
-  //     const tile = await video.$(CSS_SELECTOR_VIDEO_TILE);
-  //     const tileInnerText = await tile.getProperty("innerText");
-  //     const tileText = await tileInnerText.jsonValue();
+      const link = await profileCard.$(CSS_SELECTOR_PROFILE_LINK);
+      const linkHref = await link.getProperty("href");
+      const linkUrl = await linkHref.jsonValue();
 
-  //     const info = await video.$(CSS_SELECTOR_VIDEO_INFOBAR);
-  //     const infoInnerText = await info.getProperty("innerText");
-  //     const infoText = await infoInnerText.jsonValue();
+      const name = await profileCard.$(CSS_SELECTOR_PROFILE_NAME);
+      const nameInnerText = await name.getProperty("innerText");
+      const nameText = await nameInnerText.jsonValue();
 
-  //     return [tileText, infoText];
-  //   })
-  // );
-  // SHOW_PROGRESS && process.stdout.write("\n");
+      return [nameText, linkUrl];
+    })
+  );
+  SHOW_PROGRESS && process.stdout.write("\n");
+
+  console.log("profiles", JSON.stringify(profiles));
 
   SHOW_PROGRESS && console.log("[ ]      Closing Browser");
   await browser.close();
