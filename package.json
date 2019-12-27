@@ -5,7 +5,8 @@
   "main": "bin/dndbeyond-scraper.js",
   "scripts": {
     "start": "node src/index.js",
-    "clean": "rimraf chromedata/*"
+    "clean-chrome": "rimraf chromedata/*",
+    "clean-screenshots": "rimraf screenshots/**/*.png"
   },
   "bin": {
     "dndbeyond-scraper": "./bin/dndbeyond-scraper.js"
@@ -21,10 +22,12 @@
   },
   "homepage": "https://github.com/thehig/dndbeyond-scraper#readme",
   "dependencies": {
+    "fs-extra": "^8.1.0",
     "prettier": "^1.19.1",
     "promise-any": "^0.2.0",
     "puppeteer": "^2.0.0",
     "rimraf": "^3.0.0",
+    "sanitize-filename": "^1.6.3",
     "yargs": "^15.0.2"
   }
 }

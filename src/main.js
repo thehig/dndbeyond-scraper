@@ -13,8 +13,8 @@ async function main(options) {
     // TODO: Automate the restart but override the AUTHENTICATE to prevent infinite loop
     return;
   }
-  // if (!options.SHOW_PROGRESS) process.stdout.write(".");
-  // const parsed = parser(scraped, options);
+  if (!options.SHOW_PROGRESS) process.stdout.write(".");
+  const parsed = parser(scraped, options);
   // if (!options.SHOW_PROGRESS) process.stdout.write(".");
   // const markeddown = markdown(parsed, options);
   // if (!options.SHOW_PROGRESS) process.stdout.write(".\n");

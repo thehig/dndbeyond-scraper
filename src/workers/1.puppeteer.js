@@ -90,25 +90,41 @@ async function main(options) {
     profileCards.map(async profileCard => {
       SHOW_PROGRESS && process.stdout.write(".");
 
-      const link = await profileCard.$(CSS_SELECTOR_PROFILE_LINK);
-      const linkHref = await link.getProperty("href");
-      const linkUrl = await linkHref.jsonValue();
-
       const name = await profileCard.$(CSS_SELECTOR_PROFILE_NAME);
       const nameInnerText = await name.getProperty("innerText");
       const nameText = await nameInnerText.jsonValue();
+
+      const link = await profileCard.$(CSS_SELECTOR_PROFILE_LINK);
+      const linkHref = await link.getProperty("href");
+      const linkUrl = await linkHref.jsonValue();
 
       return [nameText, linkUrl];
     })
   );
   SHOW_PROGRESS && process.stdout.write("\n");
 
-  console.log("profiles", JSON.stringify(profiles));
+  SHOW_PROGRESS && console.log(`[ ]      Got ${profiles.length} profiles`);
+
+  const scrapedData = [];
+
+  for (let i = 0; i < profiles.length; i++) {
+    const [name, url] = profiles[i];
+    SHOW_PROGRESS && process.stdout.write(".");
+
+    SHOW_PROGRESS && console.log(`[ ]         Opening "${name}" profile json`);
+    await page.goto(`${url}/json`);
+
+    const jsonNode = await page.$("pre");
+    const jsonInnerText = await jsonNode.getProperty("innerText");
+    const json = await jsonInnerText.jsonValue();
+
+    scrapedData.push({ name, url, json });
+  }
 
   SHOW_PROGRESS && console.log("[ ]      Closing Browser");
   await browser.close();
 
-  // return shows;
+  return scrapedData;
 }
 
 async function auth({ browser, page }, options) {
@@ -117,7 +133,7 @@ async function auth({ browser, page }, options) {
     puppeteer: { AUTHENTICATE_TIMEOUT }
   } = options;
 
-  // Give the user ~10 mins to Authenticate
+  // Give the user time to Authenticate
   SHOW_PROGRESS &&
     console.log(
       `[ ]      Waiting up to ${AUTHENTICATE_TIMEOUT /
