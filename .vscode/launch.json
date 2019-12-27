@@ -7,11 +7,16 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch Program",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
+      "name": "Launch index.js",
+      "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}\\src\\index.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch json fixer",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}\\src\\utils\\json-fixer.js"
     }
   ]
 }
