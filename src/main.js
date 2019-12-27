@@ -14,7 +14,7 @@ async function main(options) {
     return;
   }
   if (!options.SHOW_PROGRESS) process.stdout.write(".");
-  const parsed = parser(scraped, options);
+  const parsed = await parser(scraped, options);
   // if (!options.SHOW_PROGRESS) process.stdout.write(".");
   // const markeddown = markdown(parsed, options);
   // if (!options.SHOW_PROGRESS) process.stdout.write(".\n");

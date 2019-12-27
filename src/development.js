@@ -2,12 +2,16 @@ const defaults = require("./defaults");
 
 const mergedArgs = {
   SHOW_PROGRESS: true,
+
+  WRITE_TO_CACHE: true,
+  READ_FROM_CACHE: false,
+
   puppeteer: {
-    ...defaults.puppeteer,
+    ...defaults.puppeteer
     // CHROME_ENABLE_DEVTOOLS: true,
     // CHROME_ENABLE_HEADLESS: false,
     // TAKE_SCREENSHOT: true
-    // AUTHENTICATE: true
+    // AUTHENTICATE: true,
   },
   parser: {
     ...defaults.parser,

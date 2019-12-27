@@ -1,10 +1,13 @@
-const puppeteer = require("puppeteer");
+const puppeteer = require("puppeteer-core");
 const promiseAny = require("promise-any"); // TODO: Remove once Promise.any is a thing
+const fs = require("fs-extra");
 
 // Open the browser, scrape the raw data into a JSON object
 async function main(options) {
   const {
     SHOW_PROGRESS,
+    WRITE_TO_CACHE,
+    READ_FROM_CACHE,
     puppeteer: {
       CHROME_EXECUTABLE_PATH,
       CHROME_DATA_DIR,
@@ -22,10 +25,16 @@ async function main(options) {
       AUTHENTICATE,
       AUTHENTICATE_TIMEOUT
     },
-    output: { SCREENSHOT_FULLPATH }
+    output: { SCREENSHOT_FULLPATH, CACHE_FULLPATH }
   } = options;
 
   SHOW_PROGRESS && console.log(`[ ] Puppeteer`);
+
+  if (READ_FROM_CACHE) {
+    SHOW_PROGRESS && console.log(`[ ]      READ_FROM_CACHE Skipping puppeteer`);
+    return;
+  }
+
   SHOW_PROGRESS && console.log(`[ ]      Opening Browser`);
   const browser = await puppeteer.launch({
     devtools: CHROME_ENABLE_DEVTOOLS,
@@ -106,7 +115,6 @@ async function main(options) {
   SHOW_PROGRESS && console.log(`[ ]      Got ${profiles.length} profiles`);
 
   const scrapedData = [];
-
   for (let i = 0; i < profiles.length; i++) {
     const [name, url] = profiles[i];
     SHOW_PROGRESS && process.stdout.write(".");
@@ -118,7 +126,17 @@ async function main(options) {
     const jsonInnerText = await jsonNode.getProperty("innerText");
     const json = await jsonInnerText.jsonValue();
 
-    scrapedData.push({ name, url, json });
+    const result = { name, url, json };
+
+    if (WRITE_TO_CACHE) {
+      const filename = CACHE_FULLPATH(name);
+
+      SHOW_PROGRESS &&
+        console.log(`[ ]         Writing "${name}" to ${filename}`);
+      await fs.outputFile(filename, JSON.stringify(result));
+    }
+
+    scrapedData.push(result);
   }
 
   SHOW_PROGRESS && console.log("[ ]      Closing Browser");

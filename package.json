@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node src/index.js",
     "clean-chrome": "rimraf chromedata/*",
-    "clean-screenshots": "rimraf screenshots/**/*.png"
+    "clean-screenshots": "rimraf screenshots/**/*.png",
+    "clean-data": "rimraf data/**/*"
   },
   "bin": {
     "dndbeyond-scraper": "./bin/dndbeyond-scraper.js"
@@ -25,7 +26,7 @@
     "fs-extra": "^8.1.0",
     "prettier": "^1.19.1",
     "promise-any": "^0.2.0",
-    "puppeteer": "^2.0.0",
+    "puppeteer-core": "^2.0.0",
     "rimraf": "^3.0.0",
     "sanitize-filename": "^1.6.3",
     "yargs": "^15.0.2"
