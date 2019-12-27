@@ -19,7 +19,7 @@ const options = {
   SHOW_PROGRESS: false,
 
   WRITE_TO_CACHE: false,
-  READ_FROM_CACHE: false,
+  READ_FROM_CACHE: true,
 
   puppeteer: {
     TAKE_SCREENSHOT: false,
@@ -44,7 +44,9 @@ const options = {
       ".ddb-campaigns-character-card-header-upper-character-info-primary"
   },
   parser: {
-    VERBOSE_PARSING: false
+    VERBOSE_PARSING: false,
+
+    MAX_DATA_ROWS: 1
   },
   markdown: {
     // Markdown Options

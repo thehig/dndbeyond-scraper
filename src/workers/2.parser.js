@@ -1,12 +1,36 @@
 const fs = require("fs-extra");
 const path = require("path");
 
+const objectStructure = ({ name, url, json }, options) => {
+  console.log(`${name} -- ${url}`);
+  const jsonData = JSON.parse(json);
+
+  const structure = JSON.stringify(
+    jsonData,
+    (key, value) => {
+      if (typeof value !== "object") return undefined;
+      if (value === null) return undefined;
+      if (value === []) return undefined;
+      return value;
+    },
+    4
+  );
+
+  console.log(structure);
+  // console.log("Keys:");
+  // Object.keys(source).map(topKey => {
+  //   Object.keys(source[topKey]).map(midKey => {
+  //     console.log(`   ${topKey}.${midKey}`);
+  //   });
+  // });
+};
+
 // Turn the scraped data into parsed, usable information
 async function main(paramData, options) {
   const {
     SHOW_PROGRESS,
     READ_FROM_CACHE,
-    parser: { VERBOSE_PARSING },
+    parser: { VERBOSE_PARSING, MAX_DATA_ROWS },
     output: { CACHE_DATA_DIR }
   } = options;
   // SHOW_PROGRESS && process.stdout.write("\n");
@@ -27,16 +51,13 @@ async function main(paramData, options) {
     );
   } // READ_FROM_CACHE
 
-  data.map(({ name, url, json }) => {
-    console.log(`${name} -- ${url}`);
-    const jsonData = JSON.parse(json);
-
-    console.log("Keys:");
-    Object.keys(jsonData).map(topKey => {
-      Object.keys(jsonData[topKey]).map(midKey => {
-        console.log(`   ${topKey}.${midKey}`);
-      });
-    });
+  // MAX_DATA_ROWS to limit input during development
+  let maxCounter = 0;
+  const characters = data.map(character => {
+    if (MAX_DATA_ROWS && maxCounter++ >= MAX_DATA_ROWS) {
+      return;
+    }
+    return objectStructure(character, options);
   });
 
   // SCOTTS GIST:       https://gist.github.com/TheHandsomeCoder/9ce9facf5ad4be6e3589755e08311025
