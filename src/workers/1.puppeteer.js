@@ -2,8 +2,25 @@ const puppeteer = require("puppeteer-core");
 const promiseAny = require("promise-any"); // TODO: Remove once Promise.any is a thing
 const fs = require("fs-extra");
 
-// Open the browser, scrape the raw data into a JSON object
 async function main(options) {
+  let scraped = await scrape(options);
+
+  // TODO: THIS IS NOT WELL TESTED
+
+  // Handle the "Restart Process" conditions
+  if (scraped === "AUTHENTICATED" || scraped === "CAPTCHA") {
+    // Try again but override the AUTHENTICATE option to be false to prevent a loop
+    scraped = await puppeteer({
+      ...options,
+      puppeteer: { ...options.puppeteer, AUTHENTICATE: false }
+    });
+  }
+
+  return scraped;
+}
+
+// Open the browser, scrape the raw data into a JSON object
+async function scrape(options) {
   const {
     SHOW_PROGRESS,
     WRITE_TO_CACHE,
@@ -59,11 +76,12 @@ async function main(options) {
 
   if (AUTHENTICATE) {
     await auth({ browser, page }, options);
-    return "RESTART";
+    await browser.close();
+    return "AUTHENTICATED";
   }
 
   const captchaRestart = await captcha({ browser, page }, options);
-  if (captchaRestart) return "RESTART";
+  if (captchaRestart) return "CAPTCHA";
 
   await page.waitForSelector(CSS_SELECTOR_CAMPAIGN_LIST);
 
@@ -117,9 +135,9 @@ async function main(options) {
   const scrapedData = [];
   for (let i = 0; i < profiles.length; i++) {
     const [name, url] = profiles[i];
-    SHOW_PROGRESS && process.stdout.write(".");
+    !SHOW_PROGRESS && process.stdout.write(".");
 
-    SHOW_PROGRESS && console.log(`[ ]         Opening "${name}" profile json`);
+    SHOW_PROGRESS && console.log(`[ ]         Getting "${name}" profile json`);
     await page.goto(`${url}/json`);
 
     const jsonNode = await page.$("pre");
@@ -132,7 +150,7 @@ async function main(options) {
       const filename = CACHE_FULLPATH(name);
 
       SHOW_PROGRESS &&
-        console.log(`[ ]         Writing "${name}" to ${filename}`);
+        console.log(`[ ]            Writing to ${filename}`);
       await fs.outputFile(filename, JSON.stringify(result));
     }
 
