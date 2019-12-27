@@ -33,17 +33,30 @@ const main = async options => {
       .filter(f => f.filename.toLocaleLowerCase().endsWith("json")) // That ends with JSON
       .filter(f => !f.filename.toLocaleLowerCase().startsWith("_")) // Not previously parsed files
       .map(async ({ filename, contents: { name, url, json } }) => {
+        const outputJson = JSON.stringify(JSON.parse(json), (key, value) => {
+          // Remove some values to make the output easier to parse (for humans)
+          if (value === null) return undefined;
+          if (value === {}) return undefined;
+          if (Array.isArray(value) && value.length == 0) return undefined;
+          if (value === "") return undefined;
+
+          // Note: characterData seems to include all the backgrounds, feats, portraits etc which I don't currently care about
+          if (key === "characterData") return undefined;
+          return value;
+        });
         // Rewrite the json (currently as string)
         console.log(`Writing _${filename}`);
         await fs.writeFile(
           // With a prepended underscore filename
           path.join(CACHE_DATA_DIR, `_${filename}`),
-          prettier.format(json, {
+          prettier.format(outputJson, {
             parser: "json"
           }) // After prettification
         );
       })
   ]);
+
+  console.log("TODO: Parse Spells character.classSpells[0].spells");
 };
 
 main(configuration);
