@@ -5,24 +5,23 @@ const objectStructure = ({ name, url, json }, options) => {
   console.log(`${name} -- ${url}`);
   const jsonData = JSON.parse(json);
 
-  const structure = JSON.stringify(
-    jsonData,
-    (key, value) => {
-      if (typeof value !== "object") return undefined;
-      if (value === null) return undefined;
-      if (value === []) return undefined;
-      return value;
-    },
-    4
-  );
+  const replacer = (key, value) => {
+    // Remove nulls
+    if (value === null) return undefined;
+    // Remove non-objects but leave their keys
+    if (typeof value !== "object") return "";
+    // Remove empty arrays
+    if (Array.isArray(value) && value.length === 0) return undefined;
+    // Remove empty objects
+    if (typeof value === "object" && Object.keys(value).length == 0)
+      return undefined;
+
+    return value;
+  };
+
+  const structure = JSON.stringify(jsonData, replacer, 4);
 
   console.log(structure);
-  // console.log("Keys:");
-  // Object.keys(source).map(topKey => {
-  //   Object.keys(source[topKey]).map(midKey => {
-  //     console.log(`   ${topKey}.${midKey}`);
-  //   });
-  // });
 };
 
 // Turn the scraped data into parsed, usable information

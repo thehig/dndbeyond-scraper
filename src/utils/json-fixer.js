@@ -5,7 +5,9 @@ const prettier = require("prettier");
 const configuration = require("../development");
 
 // The data that the Cache fn is writing is saving the stringified JSON
-// To be able to process the data, this script should process each JSON file in the data folder, check for a 'json' prop, and if it finds one, parses it and writes it to a companion file after prettification
+// To be able to process the data, this script should process each
+// JSON file in the data folder, check for a 'json' prop, and if it finds one,
+// parses it and writes it to a companion file after prettification
 
 const jsonFilesIn = async cacheDir => {
   const filesInCacheDir = await fs.readdir(cacheDir);
