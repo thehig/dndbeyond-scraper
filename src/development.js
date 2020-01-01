@@ -16,6 +16,7 @@ const mergedArgs = {
   parser: {
     ...defaults.parser,
     VERBOSE_PARSING: true
+    // MAX_DATA_ROWS: 1
   },
   markdown: {
     ...defaults.markdown

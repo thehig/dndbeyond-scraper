@@ -44,9 +44,7 @@ const options = {
       ".ddb-campaigns-character-card-header-upper-character-info-primary"
   },
   parser: {
-    VERBOSE_PARSING: false,
-
-    MAX_DATA_ROWS: 1
+    VERBOSE_PARSING: false
   },
   markdown: {
     // Markdown Options
