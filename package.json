@@ -7,7 +7,8 @@
     "start": "node src/index.js",
     "clean-chrome": "rimraf chromedata/*",
     "clean-screenshots": "rimraf screenshots/**/*.png",
-    "clean-data": "rimraf data/**/*"
+    "clean-data": "rimraf data/**/*",
+    "fixer": "node src/utils/json-fixer.js"
   },
   "bin": {
     "dndbeyond-scraper": "./bin/dndbeyond-scraper.js"
